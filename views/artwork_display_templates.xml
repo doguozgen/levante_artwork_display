@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="artwork_display_page" name="Levante Artwork Tablet Display">
+        <html lang="en">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+                <meta name="robots" content="noindex,nofollow,noarchive"/>
+                <meta name="theme-color" content="#f3efe6"/>
+                <title><t t-out="product_name"/> — Levante</title>
+                <link rel="stylesheet" type="text/css" href="/levante_artwork_display/static/src/css/artwork_display.css"/>
+            </head>
+            <body>
+                <main class="lvd-screen" aria-label="Artwork information">
+                    <section class="lvd-label">
+                        <div class="lvd-qr-column">
+                            <div class="lvd-qr-frame">
+                                <img
+                                    class="lvd-qr"
+                                    t-att-src="qr_image_url"
+                                    t-att-alt="'QR code for ' + product_name"
+                                    width="520"
+                                    height="520"
+                                />
+                            </div>
+                            <p class="lvd-scan-caption">Scan to view the artwork</p>
+                        </div>
+
+                        <div class="lvd-divider" aria-hidden="true"/>
+
+                        <div class="lvd-information">
+                            <section class="lvd-section lvd-artist-section">
+                                <p class="lvd-kicker">Artist</p>
+                                <h1 class="lvd-artist-name" t-out="artist_name"/>
+                                <p
+                                    t-if="artist_description"
+                                    class="lvd-description"
+                                    t-out="artist_description"
+                                />
+                            </section>
+
+                            <section class="lvd-section lvd-artwork-section">
+                                <p class="lvd-kicker">Artwork</p>
+                                <h2 class="lvd-artwork-name" t-out="product_name"/>
+                            </section>
+                        </div>
+                    </section>
+                </main>
+            </body>
+        </html>
+    </template>
+</odoo>
