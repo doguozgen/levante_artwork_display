@@ -1,7 +1,7 @@
 {
     "name": "Levante Artwork Display",
     "summary": "Fullscreen artwork QR display pages for published branded products",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Website/eCommerce",
     "author": "Levante Contemporary",
     "website": "https://levante.art",

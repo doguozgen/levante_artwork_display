@@ -8,7 +8,7 @@
                 <meta name="robots" content="noindex,nofollow,noarchive"/>
                 <meta name="theme-color" content="#f3efe6"/>
                 <title><t t-out="product_name"/> — Levante</title>
-                <link rel="stylesheet" type="text/css" href="/levante_artwork_display/static/src/css/artwork_display.css"/>
+                <link rel="stylesheet" type="text/css" href="/levante_artwork_display/static/src/css/artwork_display.css?v=19.0.1.1.0"/>
             </head>
             <body>
                 <main class="lvd-screen" aria-label="Artwork information">
@@ -42,6 +42,31 @@
                             <section class="lvd-section lvd-artwork-section">
                                 <p class="lvd-kicker">Artwork</p>
                                 <h2 class="lvd-artwork-name" t-out="product_name"/>
+                                <p t-if="artwork_year" class="lvd-year" t-out="artwork_year"/>
+
+                                <dl class="lvd-details">
+                                    <div t-if="artwork_technique" class="lvd-detail-row">
+                                        <dt>Technique</dt>
+                                        <dd t-out="artwork_technique"/>
+                                    </div>
+                                    <div t-if="artwork_material" class="lvd-detail-row">
+                                        <dt>Material</dt>
+                                        <dd t-out="artwork_material"/>
+                                    </div>
+                                    <div t-if="artwork_size" class="lvd-detail-row">
+                                        <dt>Size</dt>
+                                        <dd t-out="artwork_size"/>
+                                    </div>
+                                    <div class="lvd-detail-row lvd-price-row">
+                                        <dt>Price</dt>
+                                        <dd>
+                                            <span
+                                                t-field="product.list_price"
+                                                t-options='{"widget": "monetary", "display_currency": product.currency_id}'
+                                            />
+                                        </dd>
+                                    </div>
+                                </dl>
                             </section>
                         </div>
                     </section>

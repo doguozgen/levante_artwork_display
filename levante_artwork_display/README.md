@@ -1,50 +1,41 @@
 # Levante Artwork Display
 
-A minimal Odoo 19 Community addon that adds a standalone, fullscreen artwork label at:
+Fullscreen, read-only artwork information pages for Odoo 19 Community.
 
-```text
-/shop/<product-slug>/qr
-/shop/<product-slug>/qr/
-```
+## Route
 
-The QR code points to the normal public product page:
+For a published product with an OCA Product Brand:
 
-```text
-https://levante.art/shop/<product-slug>
-```
+- Product: `/shop/<product-slug>`
+- Tablet display: `/shop/<product-slug>/qr`
+- The QR code points back to the normal product URL.
 
-## What is displayed
+Both the route with and without a trailing slash are supported.
 
-- Product brand name (`product.product_brand_id.name`) as the artist
-- Product brand description (`product.product_brand_id.description`)
-- Product name (`product.template.name`) as the artwork title
-- A native Odoo-generated QR code for the canonical Levante product URL
+## Displayed information
 
-No price, stock state, images, logo, navigation, footer, internal notes, costs, suppliers, or other product fields are exposed.
+- Artist name from `product_brand_id.name`
+- Artist description from `product_brand_id.description`
+- Artwork name from `product.template.name`
+- Sales price from `product.template.list_price`
+- Currency from `product.template.currency_id`
+- Attribute values whose English attribute names are exactly:
+  - `Year`
+  - `Technique`
+  - `Material`
+  - `Size`
 
-## Eligibility and access
+Attribute-name matching is case-insensitive. Missing attribute values are hidden.
 
-The route returns 404 unless the product is:
+## Safety
 
-- active;
-- saleable;
-- published on the current website;
-- assigned to the current website/company when restricted;
-- assigned an OCA Product Brand.
-
-Sold and zero-stock artworks remain visible because stock is intentionally not checked.
-
-## Data safety
-
-The addon adds no fields and performs no writes to products or brands. It is a read-only HTTP route and standalone QWeb template.
+The addon does not create, write, or delete products, brands, attributes, or attribute values. It only reads approved public display fields.
 
 ## Dependencies
 
 - `website_sale`
-- OCA `product_brand` 19.0
+- `product_brand` from OCA/brand 19.0
 
-## Important deployment note
+## License
 
-This addon contains a Python HTTP controller. Odoo's **Apps → Import Module** wizard only accepts importable data modules (XML, i18n and static assets), so that wizard cannot install this exact dynamic route.
-
-Deploy this folder through Cloudpepper's Git Addons mechanism, then update the Apps List and install **Levante Artwork Display**.
+AGPL-3.0

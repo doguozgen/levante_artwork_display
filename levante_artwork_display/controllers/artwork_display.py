@@ -8,6 +8,7 @@ from odoo.http import request
 
 PUBLIC_BASE_URL = "https://levante.art"
 ENGLISH_LANG_CODE = "en_US"
+DISPLAY_ATTRIBUTE_NAMES = ("size", "technique", "material", "year")
 
 
 class LevanteArtworkDisplayController(http.Controller):
@@ -29,7 +30,7 @@ class LevanteArtworkDisplayController(http.Controller):
 
         # Read through sudo only after resolving the requested record, then expose
         # solely the explicitly selected public fields below. This route performs
-        # no create/write/unlink operation on products or brands.
+        # no create/write/unlink operation on products, attributes, or brands.
         product_en = product.sudo().with_context(
             website_id=website.id,
             lang=ENGLISH_LANG_CODE,
@@ -41,6 +42,7 @@ class LevanteArtworkDisplayController(http.Controller):
         brand_en = product_en.product_brand_id.sudo().with_context(
             lang=ENGLISH_LANG_CODE,
         )
+        artwork_attributes = self._extract_display_attributes(product_en)
 
         product_path = product_en.website_url or (
             f"/shop/{request.env['ir.http']._slug(product_en)}"
@@ -62,9 +64,14 @@ class LevanteArtworkDisplayController(http.Controller):
         response = request.render(
             "levante_artwork_display.artwork_display_page",
             {
+                "product": product_en,
                 "product_name": product_en.name,
                 "artist_name": brand_en.name,
                 "artist_description": brand_en.description,
+                "artwork_size": artwork_attributes["size"],
+                "artwork_technique": artwork_attributes["technique"],
+                "artwork_material": artwork_attributes["material"],
+                "artwork_year": artwork_attributes["year"],
                 "product_url": product_url,
                 "qr_image_url": qr_image_url,
             },
@@ -73,6 +80,28 @@ class LevanteArtworkDisplayController(http.Controller):
         response.headers["Pragma"] = "no-cache"
         response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
         return response
+
+    @staticmethod
+    def _extract_display_attributes(product):
+        """Return the four approved attribute values without changing records."""
+        values_by_name = {name: False for name in DISPLAY_ATTRIBUTE_NAMES}
+
+        for line in product.attribute_line_ids:
+            attribute_name = (line.attribute_id.name or "").strip().casefold()
+            if attribute_name not in values_by_name:
+                continue
+
+            value_names = [
+                value_name
+                for value_name in (
+                    (value.name or "").strip() for value in line.value_ids
+                )
+                if value_name
+            ]
+            if value_names:
+                values_by_name[attribute_name] = " / ".join(value_names)
+
+        return values_by_name
 
     @staticmethod
     def _is_public_artwork(product, website):

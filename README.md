@@ -1,14 +1,15 @@
-# Levante Artwork Display repository
+# Levante Artwork Display — Cloudpepper repository
 
-Cloudpepper/Odoo repository layout:
+This repository contains the Odoo addon in the required nested structure:
 
+```text
+repository-root/
+└── levante_artwork_display/
+    ├── __init__.py
+    ├── __manifest__.py
+    ├── controllers/
+    ├── static/
+    └── views/
 ```
-levante_artwork_display/
-  __init__.py
-  __manifest__.py
-  controllers/
-  views/
-  static/
-```
 
-Add the repository root to Cloudpepper. The addon itself must remain inside the `levante_artwork_display` child directory.
+Version `19.0.1.1.0` adds the Sales Price and the `Year`, `Technique`, `Material`, and `Size` product attributes to the fullscreen tablet page.
