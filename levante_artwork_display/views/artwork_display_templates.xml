@@ -8,11 +8,14 @@
                 <meta name="robots" content="noindex,nofollow,noarchive"/>
                 <meta name="theme-color" content="#f3efe6"/>
                 <title><t t-out="product_name"/> — Levante</title>
-                <link rel="stylesheet" type="text/css" href="/levante_artwork_display/static/src/css/artwork_display.css?v=19.0.1.1.0"/>
+                <link rel="stylesheet" type="text/css" href="/levante_artwork_display/static/src/css/artwork_display.css?v=19.0.1.2.0"/>
             </head>
             <body>
                 <main class="lvd-screen" aria-label="Artwork information">
-                    <section class="lvd-label">
+                    <section t-attf-class="lvd-label#{' lvd-is-sold' if is_sold else ''}">
+                        <div t-if="is_sold" class="lvd-sold-badge" role="status" aria-label="Sold">
+                            <span>SOLD</span>
+                        </div>
                         <div class="lvd-qr-column">
                             <div class="lvd-qr-frame">
                                 <img
@@ -61,8 +64,8 @@
                                         <dt>Price</dt>
                                         <dd>
                                             <span
-                                                t-field="product.list_price"
-                                                t-options='{"widget": "monetary", "display_currency": product.currency_id}'
+                                                t-out="display_price"
+                                                t-options='{"widget": "monetary", "display_currency": display_currency}'
                                             />
                                         </dd>
                                     </div>

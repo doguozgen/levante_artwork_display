@@ -44,6 +44,24 @@ class LevanteArtworkDisplayController(http.Controller):
         )
         artwork_attributes = self._extract_display_attributes(product_en)
 
+        # Use the exact same website pricing context as the normal product page.
+        # request.pricelist reflects the visitor's selected website currency/pricelist,
+        # while _get_combination_info also applies the website tax display and fiscal position.
+        product_variant = product_en.product_variant_id.sudo().with_context(
+            website_id=website.id,
+            lang=ENGLISH_LANG_CODE,
+        )
+        combination_info = product_en._get_combination_info(
+            product_id=product_variant.id,
+            add_qty=1.0,
+        )
+        display_price = combination_info["price"]
+        display_currency = combination_info["currency"]
+
+        # Match Odoo's native eCommerce sold-out calculation exactly. This returns
+        # False for untracked products and products allowed to sell out of stock.
+        is_sold = product_variant._is_sold_out()
+
         product_path = product_en.website_url or (
             f"/shop/{request.env['ir.http']._slug(product_en)}"
         )
@@ -72,6 +90,9 @@ class LevanteArtworkDisplayController(http.Controller):
                 "artwork_technique": artwork_attributes["technique"],
                 "artwork_material": artwork_attributes["material"],
                 "artwork_year": artwork_attributes["year"],
+                "display_price": display_price,
+                "display_currency": display_currency,
+                "is_sold": is_sold,
                 "product_url": product_url,
                 "qr_image_url": qr_image_url,
             },

@@ -39,3 +39,10 @@ The addon does not create, write, or delete products, brands, attributes, or att
 ## License
 
 AGPL-3.0
+
+
+## Version 1.2
+
+- Shows a circular red **SOLD** badge when Odoo's native website stock logic marks the product variant as sold out.
+- Uses the visitor's active website pricelist/currency for the QR display price, matching the normal product page.
+- Keeps the layout responsive for iPad Air landscape and portrait fallback.
